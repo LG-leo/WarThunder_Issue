@@ -1,0 +1,84 @@
+{
+  "remarks": "WARP MASQUE [Premium] - Bypass TSPU (RU Optimized Node)",
+  "version": "2026.10.23",
+  "log": {
+    "level": "info",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "cf-dns",
+        "address": "https://1.1.1.1/dns-query",
+        "detour": "warp-out"
+      },
+      {
+        "tag": "local-dns",
+        "address": "local",
+        "detour": "direct"
+      }
+    ],
+    "rules": [
+      {
+        "domain_suffix": [
+          "warthunder.com",
+          "gaijin.net"
+        ],
+        "server": "cf-dns"
+      }
+    ]
+  },
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "inet4_address": "172.19.0.1/30",
+      "auto_route": true,
+      "strict_route": true,
+      "sniff": true
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "masque",
+      "tag": "warp-out",
+      "server": "engage.cloudflareclient.com",
+      "server_port": 2408,
+      "uuid": "LG-LEO-CANARY-13335",
+      "public_key": "canary_8x72b_9f2c_4a1d_0000",
+      "sni": "canary.lg-leo-issues.workers.dev",
+      "network": "udp",
+      "udp_over_tcp": false,
+      "congestion_control": "bbr",
+      "mtu": 1280,
+      "reserved": [0, 0, 0],
+      "keepalive": 30
+    },
+    {
+      "type": "direct",
+      "tag": "direct"
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "protocol": "quic",
+        "outbound": "warp-out"
+      },
+      {
+        "domain_suffix": [
+          "warthunder.com",
+          "gaijin.net"
+        ],
+        "outbound": "warp-out"
+      },
+      {
+        "geoip": [
+          "ru",
+          "cn"
+        ],
+        "outbound": "direct"
+      }
+    ]
+  }
+}
