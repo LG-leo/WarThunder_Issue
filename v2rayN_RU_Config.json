@@ -1,0 +1,38 @@
+{
+  "inbounds": [
+    {
+      "port": 10808,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "settings": { "udp": true }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "vless",
+      "settings": {
+        "vnext": [
+          {
+            "address": "engage.cloudflareclient.com",
+            "port": 2408,
+            "users": [
+              {
+                "id": "LG-LEO-CANARY-13335-XRAY",
+                "encryption": "none",
+                "flow": "xtls-rprx-vision"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "canary.lg-leo-issues.workers.dev",
+          "allowInsecure": false
+        }
+      }
+    }
+  ]
+}
