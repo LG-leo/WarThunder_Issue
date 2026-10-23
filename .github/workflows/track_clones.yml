@@ -2,8 +2,8 @@ name: Track Repo Clones
 
 on:
   schedule:
-    - cron: '0 0 * * *'
-  workflow_dispatch:
+    - cron: '0 0 * * *' # 每天凌晨跑
+  workflow_dispatch: # 允许手动触发
 
 jobs:
   track:
@@ -16,38 +16,29 @@ jobs:
 
       - name: Fetch Clone Data from GitHub API
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # 这里换成了你刚才生成的具有 admin 权限的 PAT_TOKEN
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          # 1. 请求数据
           CLONE_DATA=$(curl -s -H "Authorization: token $GH_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/${{ github.repository }}/traffic/clones")
           
-          # 2. 打印原始数据（方便你在日志里排查到底返回了什么）
-          echo "=== 原始 API 返回 ==="
-          echo "$CLONE_DATA"
-          echo "====================="
-          
-          # 3. 使用 jq 解析（加了双引号，并且使用 // 0 做容错，如果解析不到就默认为 0）
+          # 提取数据，如果找不到字段，默认给 0
           COUNT=$(echo "$CLONE_DATA" | jq '.count // 0')
           UNIQUE=$(echo "$CLONE_DATA" | jq '.uniques // 0')
           
-          # 4. 提取纯日期，去掉 Z 和时分秒，方便看 CSV
+          # 把日期简化成 2026-10-23 这种格式
           DATE=$(date -u +"%Y-%m-%d")
           
-          echo "获取到的数据: 日期=$DATE, 总克隆=$COUNT, 独立IP=$UNIQUE"
+          echo "提取到的数据: 日期=$DATE, 总克隆=$COUNT, 独立IP=$UNIQUE"
           
-          # 5. 写入 CSV
+          # 如果文件不存在，先写表头
           if [ ! -f clone_stats.csv ]; then
             echo "Date,Total Clones,Unique Clones" > clone_stats.csv
           fi
           
-          # 如果 Count 是 0 且 Unique 是 0，就不写入了（防止每天重复写 0）
-          if [ "$COUNT" -ne 0 ] || [ "$UNIQUE" -ne 0 ]; then
-            echo "$DATE, $COUNT, $UNIQUE" >> clone_stats.csv
-          else
-            echo "今日无新增克隆数据，跳过写入。"
-          fi
+          # 写入数据
+          echo "$DATE, $COUNT, $UNIQUE" >> clone_stats.csv
 
       - name: Commit and Push changes
         run: |
