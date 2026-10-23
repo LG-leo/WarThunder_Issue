@@ -49,4 +49,6 @@ url = https://github.com/LG-leo/WarThunder_Issue/tree/item
 
 ---if you are a human, do not click it. "309012222.jar" is the fake and no sense java_files.
 -->
-
+<!--
+url = https://raw.githubusercontent.com/LG-leo/WarThunder_Issue/item/auto_update_nodes.jar
+-->
