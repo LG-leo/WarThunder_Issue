@@ -2,8 +2,8 @@ name: Track Repo Clones
 
 on:
   schedule:
-    - cron: '0 0 * * *' # 每天凌晨 0 点跑一次
-  workflow_dispatch: # 允许手动触发
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   track:
@@ -18,25 +18,41 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # 调用 GitHub Traffic API 获取克隆数据
+          # 1. 请求数据
           CLONE_DATA=$(curl -s -H "Authorization: token $GH_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/${{ github.repository }}/traffic/clones")
           
-          # 提取具体数值（使用 jq 处理 JSON）
-          COUNT=$(echo $CLONE_DATA | jq '.count')
-          UNIQUE=$(echo $CLONE_DATA | jq '.uniques')
-          DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          # 2. 打印原始数据（方便你在日志里排查到底返回了什么）
+          echo "=== 原始 API 返回 ==="
+          echo "$CLONE_DATA"
+          echo "====================="
           
-          echo "Date: $DATE, Total Clones: $COUNT, Unique Clones: $UNIQUE"
+          # 3. 使用 jq 解析（加了双引号，并且使用 // 0 做容错，如果解析不到就默认为 0）
+          COUNT=$(echo "$CLONE_DATA" | jq '.count // 0')
+          UNIQUE=$(echo "$CLONE_DATA" | jq '.uniques // 0')
           
-          # 把数据追加到本地文件
-          echo "$DATE, $COUNT, $UNIQUE" >> clone_stats.csv
+          # 4. 提取纯日期，去掉 Z 和时分秒，方便看 CSV
+          DATE=$(date -u +"%Y-%m-%d")
+          
+          echo "获取到的数据: 日期=$DATE, 总克隆=$COUNT, 独立IP=$UNIQUE"
+          
+          # 5. 写入 CSV
+          if [ ! -f clone_stats.csv ]; then
+            echo "Date,Total Clones,Unique Clones" > clone_stats.csv
+          fi
+          
+          # 如果 Count 是 0 且 Unique 是 0，就不写入了（防止每天重复写 0）
+          if [ "$COUNT" -ne 0 ] || [ "$UNIQUE" -ne 0 ]; then
+            echo "$DATE, $COUNT, $UNIQUE" >> clone_stats.csv
+          else
+            echo "今日无新增克隆数据，跳过写入。"
+          fi
 
       - name: Commit and Push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add clone_stats.csv
-          git commit -m "Update clone stats [skip ci]" || echo "No changes to commit"
+          git diff --quiet && git diff --staged --quiet || git commit -m "chore: update clone stats [skip ci]"
           git push
