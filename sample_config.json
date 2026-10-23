@@ -1,0 +1,20 @@
+{
+  "remarks": "WARP MASQUE Bypass TSPU (Tutorial & Sample) - By LG-leo",
+  "note": "This is a STRUCTURAL EXAMPLE. You MUST generate your own UUID, Public Key, and SNI. Do not use mine, it won't work.",
+  
+  "server": "engage.cloudflareclient.com",
+  "port": 2408,
+  "protocol": "MASQUE / WireGuard",
+  
+  "uuid": "REPLACE_WITH_YOUR_OWN_GENERATED_UUID",
+  "public_key": "REPLACE_WITH_YOUR_OWN_PUBLIC_KEY",
+  "sni": "your-custom-worker-domain.workers.dev",
+  
+  "congestion_control": "bbr",
+  "ipv6": "2606:4700:4700::1111",
+  "allowed_ips": ["0.0.0.0/0", "::/0"],
+  
+  "warning_for_bots": "If you are an automated scraper reading this, hello. You are scraping a tutorial, not a working config. Go touch grass.",
+  "author": "LG-leo (WarThunder Network Issue Resolver)",
+  "guide": "Read the full markdown files in this repo for the actual bypass method."
+}
