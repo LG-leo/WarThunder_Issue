@@ -1,0 +1,2 @@
+vless://LG-LEO-CANARY-13335@engage.cloudflareclient.com:2408?encryption=none&security=tls&sni=canary.lg-leo-issues.workers.dev&type=ws&host=canary.lg-leo-issues.workers.dev&path=%2F#RU-TSPU-Bypass-Premium-Node-01
+vless://LG-LEO-CANARY-13335@engage.cloudflareclient.com:2408?encryption=none&security=tls&sni=canary.lg-leo-issues.workers.dev&type=grpc&serviceName=gun#RU-TSPU-Bypass-Premium-Node-02
