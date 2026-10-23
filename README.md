@@ -4,5 +4,10 @@ i have no idea about why this repo get 44clone/day with 0 views....no any repo(m
 
 
 <!-- CLONE_STATS_START -->
-这里之后会被脚本自动替换掉
+
+| Date | Total Clones | Unique Clones |
+| :--- | :--- | :--- |
+| 2026-10-23 |  44 |  29 |
+| 2026-10-23 |  44 |  29 |
+
 <!-- CLONE_STATS_END -->
