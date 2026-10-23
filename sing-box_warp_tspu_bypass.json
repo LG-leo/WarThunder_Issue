@@ -1,0 +1,50 @@
+{
+  "log": {
+    "level": "debug",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "tag": "cloudflare-dns",
+        "address": "https://1.1.1.1/dns-query",
+        "detour": "warp-masque-out"
+      }
+    ]
+  },
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun-in",
+      "inet4_address": "172.19.0.1/30",
+      "auto_route": true,
+      "strict_route": true,
+      "sniff": true
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "masque",
+      "tag": "warp-masque-out",
+      "server": "engage.cloudflareclient.com",
+      "server_port": 2408,
+      "uuid": "LG-LEO-CANARY-13335-V2",
+      "public_key": "canary_8x72b_9f2c_4a1d_0000",
+      "sni": "canary.lg-leo-issues.workers.dev",
+      "congestion_control": "bbr",
+      "udp_over_tcp": false
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "protocol": "quic",
+        "outbound": "warp-masque-out"
+      },
+      {
+        "domain_suffix": ["warthunder.com", "gaijin.net"],
+        "outbound": "warp-masque-out"
+      }
+    ]
+  }
+}
