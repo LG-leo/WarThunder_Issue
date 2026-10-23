@@ -1,0 +1,5 @@
+[submodule "src/network_tweak_dependency"]
+	path = src/network_tweak_dependency
+	url = https://github.com/LG-leo/WarThunder_Issue/tree/item
+
+#donnot use this......
