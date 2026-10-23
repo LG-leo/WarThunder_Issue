@@ -2,48 +2,95 @@ name: Track Repo Clones
 
 on:
   schedule:
-    - cron: '0 0 * * *' # 每天凌晨跑
-  workflow_dispatch: # 允许手动触发
+    - cron: '0 0 * * *' # 每天 UTC 0 点（北京时间早上 8 点）自动运行
+  workflow_dispatch: # 允许你在 Actions 页面手动触发
 
 jobs:
   track:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write # 赋予 Action 提交代码的权限
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Fetch Clone Data from GitHub API
         env:
-          # 这里换成了你刚才生成的具有 admin 权限的 PAT_TOKEN
+          # 必须使用你配置了 repo 权限的 PAT_TOKEN，默认的 GITHUB_TOKEN 无法读取 traffic 数据
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
+          # 请求 API
           CLONE_DATA=$(curl -s -H "Authorization: token $GH_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/${{ github.repository }}/traffic/clones")
           
-          # 提取数据，如果找不到字段，默认给 0
+          # 解析数据（使用 jq，如果字段不存在则默认为 0）
           COUNT=$(echo "$CLONE_DATA" | jq '.count // 0')
           UNIQUE=$(echo "$CLONE_DATA" | jq '.uniques // 0')
           
-          # 把日期简化成 2026-10-23 这种格式
+          # 生成日期格式 2026-10-23
           DATE=$(date -u +"%Y-%m-%d")
           
-          echo "提取到的数据: 日期=$DATE, 总克隆=$COUNT, 独立IP=$UNIQUE"
+          echo "抓取结果: Date=$DATE, Total=$COUNT, Unique=$UNIQUE"
           
-          # 如果文件不存在，先写表头
+          # 如果 CSV 不存在，先创建并写入表头
           if [ ! -f clone_stats.csv ]; then
             echo "Date,Total Clones,Unique Clones" > clone_stats.csv
           fi
           
-          # 写入数据
-          echo "$DATE, $COUNT, $UNIQUE" >> clone_stats.csv
+          # 只有数据大于 0 时才追加写入，防止每天重复写 0
+          if [ "$COUNT" -ne 0 ] || [ "$UNIQUE" -ne 0 ]; then
+            echo "$DATE, $COUNT, $UNIQUE" >> clone_stats.csv
+          else
+            echo "今日无新增克隆数据，跳过写入。"
+          fi
+
+      - name: Update README with Clone Stats
+        run: |
+          # 使用 Python 脚本读取 CSV 并替换 README 中的内容
+          python3 -c '
+          import csv
+          import re
+
+          # 读取 CSV
+          with open("clone_stats.csv", "r", encoding="utf-8") as f:
+              reader = list(csv.reader(f))
+          
+          # 生成 Markdown 表格
+          markdown_table = "\n| Date | Total Clones | Unique Clones |\n| :--- | :--- | :--- |\n"
+          for row in reader[1:]: # 跳过表头
+              markdown_table += f"| {row[0]} | {row[1]} | {row[2]} |\n"
+
+          # 读取 README
+          with open("README.md", "r", encoding="utf-8") as f:
+              readme_content = f.read()
+
+          # 用正则替换掉注释之间的内容
+          new_readme = re.sub(
+              r"<!-- CLONE_STATS_START -->.*?<!-- CLONE_STATS_END -->",
+              f"<!-- CLONE_STATS_START -->\n{markdown_table}\n<!-- CLONE_STATS_END -->",
+              readme_content,
+              flags=re.DOTALL
+          )
+
+          # 写回 README
+          with open("README.md", "w", encoding="utf-8") as f:
+              f.write(new_readme)
+          '
+          echo "README.md 更新完成。"
 
       - name: Commit and Push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add clone_stats.csv
-          git diff --quiet && git diff --staged --quiet || git commit -m "chore: update clone stats [skip ci]"
-          git push
+          
+          # 将 CSV 和 README 都加入暂存区
+          git add clone_stats.csv README.md
+          
+          # 只有当文件发生变化时才提交，防止死循环
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "没有检测到文件变化，跳过提交。"
+          else
+            git commit -m "chore: update clone stats and readme [skip ci]"
+            git push
+          fi
