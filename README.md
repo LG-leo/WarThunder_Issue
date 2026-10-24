@@ -4,6 +4,19 @@ i have no idea about why this repo get 44clone/day with 0 views....no any repo(m
 
 📥 **[Download Full Config ZIP (Direct Link)](https://dry-art-b499.lookgame12023.workers.dev/)**
 
+----
+"Due to Cloudflare's Anycast routing, AS13335 users are physically forced to connect to the closest Gaijin server (ASIA). When combined with the 300ms QoS penalty, this makes it impossible for WARP users to escape the highly toxic Asian server environment (hackers/cheaters) by routing to EU/NA. Gaijin's QoS policy effectively traps WARP users in a high-latency, high-hacker environment."
+
+"Ultimately, this QoS deprioritization only hurts the poor and the sanctioned. Russian players fighting their own TSPU, and Chinese students who can't afford commercial accelerators, are the ones forced into 600ms latency and toxic hacker servers. Gaijin isn't fighting DDoS; they are taxing the vulnerable."
+
+“Proof of Censorship: Gaijin forum mods deleted an 11,000-packet network test as 'Spam' to hide their AS13335 QoS policies.”
+“Gaijin forum is actively censoring technical evidence of AS13335 QoS throttling.”
+<img width="2252" height="768" alt="image" src="https://github.com/user-attachments/assets/3632cfd9-4466-4799-9f1c-c9adaed3045c" />
+<img width="2280" height="446" alt="image" src="https://github.com/user-attachments/assets/c65b600c-0cfd-476a-930b-266f7433d3b8" />
+<img width="2880" height="4764" alt="image" src="https://github.com/user-attachments/assets/7e6208b1-8897-44d6-98c3-74c75bc8acc1" />
+
+----
+
 <!-- CLONE_STATS_START -->
 
 | Date | Total Clones | Unique Clones |
