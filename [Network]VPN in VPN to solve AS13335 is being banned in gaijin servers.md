@@ -47,6 +47,8 @@ EMMM, May this files are not talk about war thunder... may you can get lower pin
 
 4. you are not finish!
 
+- You can directly use tools like ProxyForFree or xProton to convert the free configuration of Proton VPN into a local proxy through scripts, thereby bypassing the restrictions of the official client.
+
  Step 1: Obtain the "Manual Setup" credentials (Key)
 
 Regardless of the protocol used, you need a set of dedicated manual account and password settings, which are different from the ones you use to log in to the official website.
