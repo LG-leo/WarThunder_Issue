@@ -1,3 +1,7 @@
+"Since the forum moderators suspended my account for 'Dismissive attitude' and 'Spam' before I could post this, here is the complete list of 18 critical Mac OS bugs. Enjoy the 'real investment'."
+
+----
+
 MAC problem[1]cloudflare Warp 不能进行单独的DNS解析
 
 war thunder BUG[2]war thunder不能使用中文输入法
