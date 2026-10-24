@@ -11,6 +11,8 @@
 
 “Proof of Censorship: Gaijin forum mods deleted an 11,000-packet network test as 'Spam' to hide their AS13335 QoS policies.”
 “Gaijin forum is actively censoring technical evidence of AS13335 QoS throttling.”
+<img width="1416" height="470" alt="2d4ce8a3e3b57b396be488b9fd6c24e0" src="https://github.com/user-attachments/assets/d3ed6d4e-fe6f-4dfd-b7fe-f11b03576dac" />
+Spam（垃圾广告）、Multi-posting（重复发帖）、3.15 Dismissive attitude（轻蔑态度）
 <img width="2252" height="768" alt="image" src="https://github.com/user-attachments/assets/3632cfd9-4466-4799-9f1c-c9adaed3045c" />
 <img width="2280" height="446" alt="image" src="https://github.com/user-attachments/assets/c65b600c-0cfd-476a-930b-266f7433d3b8" />
 <img width="2880" height="4764" alt="image" src="https://github.com/user-attachments/assets/7e6208b1-8897-44d6-98c3-74c75bc8acc1" />
