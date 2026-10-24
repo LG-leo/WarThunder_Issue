@@ -15,6 +15,8 @@ i have no idea about why this repo get 44clone/day with 0 views....no any repo(m
 <img width="2280" height="446" alt="image" src="https://github.com/user-attachments/assets/c65b600c-0cfd-476a-930b-266f7433d3b8" />
 <img width="2880" height="4764" alt="image" src="https://github.com/user-attachments/assets/7e6208b1-8897-44d6-98c3-74c75bc8acc1" />
 
+## and absolutely! I cannot repiles any topic!
+
 ----
 
 <!-- CLONE_STATS_START -->
