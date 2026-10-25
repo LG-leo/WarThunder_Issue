@@ -83,7 +83,11 @@ curl -sL -o usque.zip "https://github.com/Diniboy1123/usque/releases/download/v$
 unzip -oq usque.zip && chmod +x usque
 ```
 
-*(For Intel Macs, replace `darwin_arm64` with `darwin_amd64`)*
+```bash_intel
+VER=$(curl -sL https://api.github.com/repos/Diniboy1123/usque/releases/latest | grep '"tag_name":' | cut -d '"' -f 4 | sed 's/v//')
+curl -sL -o usque.zip "https://github.com/Diniboy1123/usque/releases/download/v${VER}/usque_${VER}_darwin_amd64.zip"
+unzip -oq usque.zip && chmod +x usque
+```
 
 **Windows (PowerShell):**
 
@@ -93,7 +97,11 @@ Invoke-WebRequest -Uri "https://github.com/Diniboy1123/usque/releases/download/v
 Expand-Archive -Path "usque.zip" -DestinationPath "." -Force
 ```
 
-*(For ARM Windows, replace `windows_amd64` with `windows_arm64`)*
+```powershell_arm
+$VER = (Invoke-RestMethod -Uri "https://api.github.com/repos/Diniboy1123/usque/releases/latest").tag_name -replace 'v', ''
+Invoke-WebRequest -Uri "https://github.com/Diniboy1123/usque/releases/download/v${VER}/usque_${VER}_windows_arm64.zip" -OutFile "usque.zip"
+Expand-Archive -Path "usque.zip" -DestinationPath "." -Force
+```
 
 **Linux (PC/Servers):**
 
@@ -112,6 +120,7 @@ unzip -oq usque.zip && chmod +x usque
 ```
 
 **Windows:**
+
 ```cmd
 usque.exe register -a -n "My-Local"
 ```
