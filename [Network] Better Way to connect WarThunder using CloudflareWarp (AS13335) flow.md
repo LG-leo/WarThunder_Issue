@@ -83,6 +83,8 @@ curl -sL -o usque.zip "https://github.com/Diniboy1123/usque/releases/download/v$
 unzip -oq usque.zip && chmod +x usque
 ```
 
+**macOS(Intel):**
+
 ```bash_intel
 VER=$(curl -sL https://api.github.com/repos/Diniboy1123/usque/releases/latest | grep '"tag_name":' | cut -d '"' -f 4 | sed 's/v//')
 curl -sL -o usque.zip "https://github.com/Diniboy1123/usque/releases/download/v${VER}/usque_${VER}_darwin_amd64.zip"
@@ -96,6 +98,8 @@ $VER = (Invoke-RestMethod -Uri "https://api.github.com/repos/Diniboy1123/usque/r
 Invoke-WebRequest -Uri "https://github.com/Diniboy1123/usque/releases/download/v${VER}/usque_${VER}_windows_amd64.zip" -OutFile "usque.zip"
 Expand-Archive -Path "usque.zip" -DestinationPath "." -Force
 ```
+
+**windows_arm(Powershell):**
 
 ```powershell_arm
 $VER = (Invoke-RestMethod -Uri "https://api.github.com/repos/Diniboy1123/usque/releases/latest").tag_name -replace 'v', ''
