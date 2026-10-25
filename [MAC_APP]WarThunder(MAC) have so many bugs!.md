@@ -6,6 +6,18 @@ MAC problem[1]cloudflare Warp 不能进行单独的DNS解析
 
 war thunder BUG[2]war thunder不能使用中文输入法
 
+```
+根源在于 Gaijin 的 Dagor 引擎极其粗暴地劫持了键盘输入（Raw Input）。
+
+    在 Windows 上，游戏引擎会调用系统的 WM_IME 消息来接管输入法候选框。但战雷的引擎底层只认“物理按键”（WASD 是绝对优先级的）。
+
+    到了 Mac 上，情况更加灾难。macOS 处理输入法用的是极其封闭的 NSTextInputClient 协议。
+
+    如果你在游戏里按了 Option（或者 Control + Space）想切中文，战雷的底层代码首先拦截了 Option 键，判定为：“哦！玩家按下了自由视角键（Free Look）！”于是你的鼠标/视角被锁死了。
+
+    同时，它根本没有实现让系统输入法（IME）呼出候选框的接口。系统的输入法进程发现游戏界面拒绝接收文字输入，就把候选框默默收回去了。
+```
+
 MAC problem[3]更新系统后，程序无法运行
 
 MAC problem+war thunder BUG[4]war thunder不能使用第三方输入法
