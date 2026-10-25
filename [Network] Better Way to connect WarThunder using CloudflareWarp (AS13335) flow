@@ -28,7 +28,11 @@ For the past few weeks, playing War Thunder via Cloudflare WARP has been a night
 *Note: My testing showed the WARP tunnel itself is healthy (0.4% PL to 8.8.8.8). The issue is the "Last Mile" QoS throttling applied by Gaijin's upstream provider specifically to the Cloudflare AS13335 UDP network.*
 
 ---
+### for Clash_Verge_rev
 
+In fact, I found that in point-to-point connections and system proxies, the `timeout/error` error display problems are most likely to occur. As for the traffic graph, there have always been issues with it.
+
+---
 ### 🛠️ Step-by-Step Guide
 
 **Prerequisites:** 
