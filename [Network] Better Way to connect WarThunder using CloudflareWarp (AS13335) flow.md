@@ -30,7 +30,9 @@ For the past few weeks, playing War Thunder via Cloudflare WARP has been a night
 ---
 ### for Clash_Verge_rev
 
-In fact, I found that in point-to-point connections and system proxies, the `timeout/error` error display problems are most likely to occur. As for the traffic graph, there have always been issues with it.
+In fact, I found that in point-to-point connections and system proxies, the `timeout/error` error display problems are most likely to occur. TUN can demo the real `timeoout/error/connect`
+
+As for the traffic graph, there have always been issues with it.(include all mode)
 
 ---
 ### 🛠️ Step-by-Step Guide
