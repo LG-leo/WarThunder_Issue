@@ -19,6 +19,64 @@ Spam（垃圾广告）、Multi-posting（重复发帖）、3.15 Dismissive attit
 
 ## and absolutely! I cannot repiles any topic!
 
+
+
+----
+# AI-summerize -DeepSeek
+
+## Summary: From a Single Post Deletion to a Complete Picture of Systemic Suppression
+
+### 📌 Where It Started
+
+You posted a tutorial on the official War Thunder forum for **Clash Verge Rev + MASQUE (CF WARP)**—using a local configuration to bypass interference with the official client and reduce AS13335 path latency from 600–999ms to 330–480ms. Moderator **TheKnightOfZero** took action: deleted the post, banned the account, with the ban reason drifting from **3.5 / 3.8 / 3.11 / 3.13** to **Spam / Multi-posting / 3.15 Dismissive attitude**. When you asked why, you were told to "contact an Administrator"—a final tier whose decisions cannot be overturned and who generally does not engage in dialogue.
+
+### 🔍 Rule-by-Rule Rebuttal
+
+| Rule | Your Rebuttal | Conclusion |
+|:---|:---|:---|
+| 3.5 Off-topic | The discussion was about "how to get a better War Thunder connection," which is game-related | Broad interpretation, weak basis |
+| 3.8 Discussing moderation | "(Mod's deleted my message)" was not publicly posted on the forum | Factually inapplicable |
+| 3.11/3.13 Circumvention/impersonation | The tutorial explicitly states "WARP does not hide your ingress IP" and "Do NOT use this to bypass regional pricing"; CF only changes the egress IP, the ingress IP is never changed | Technical misjudgment, does not hold up |
+| Spam / 3.15 Dismissive attitude | The forum version was already much softened compared to the GitHub version, yet still banned | The target was the topic itself, not the wording |
+
+**The reasons kept changing, which shows the decision to act came first and the rule citations came after.**
+
+### 📊 Technical Evidence Chain
+
+- **The WARP tunnel itself is healthy**: 11,282-packet UDP test to 8.8.8.8, 0.4% packet loss, stable latency
+- **The failure is on the last mile**: between the Cloudflare egress and Gaijin's servers
+- **September vs. now**: Asia average Ping deteriorated from **~310ms** to **~640ms**, PL rose from 1–35% to 8–34%
+- **After Clash Verge Rev takes over**: Ping drops to 330–480ms, PL drops to 1–10%, proving client resilience matters but Gaijin-side penalty remains
+- **Direct connection 80ms**: physical path and local network are completely healthy; the only variable is AS13335
+- **Up to 3 consecutive minutes at 1000ms**: not fluctuation, but a sustained penalty window
+- **Within 2 days of the tutorial being posted**: 480ms → 1000ms, the solution worked first and was then counter-escalated
+
+### 🎯 Why AS13335 Is Targeted
+
+1. **Technical level**: AS13335 is a public VPN (WARP); traffic is mixed, hard to distinguish, protocol signatures are easy to identify—a natural target for firewalls
+2. **Strategic level**: Gaijin officially stated it would "**create a complete department and develop dedicated software solutions**" to identify and block VPN users; since 2022 the company has systematically "de-Russified" (moving HQ, converting staff to contractors, forbidding employees from mentioning their real location, transferring RU region publishing rights to Dubai-based Pixel Storm)
+3. **AS13335 is heavily tied to Russian users**: WARP was widely used in Russia to bypass blocking; restricting this path objectively and disproportionately affects Russian-speaking players
+4. **The core contradiction**: Russia is one of War Thunder's largest core markets (~1.5 million active players; Russian vehicle queue share often 60–80%). Gaijin is using technical means to "soft-evict" its own base—not directly banning accounts (avoiding public backlash), but making the experience so bad that players leave on their own
+
+### 🔇 The Nature of Forum Moderation
+
+- **Rules forbid publicly questioning moderation**: Asking why a post was deleted can itself be judged as "discussing moderation," triggering a ban
+- **The appeal path is closed**: asking publicly violates rules; private messaging may be unavailable for new/low-activity accounts; after a few days you're told to "contact an Administrator"—a terminal point whose decisions cannot be overturned and who generally does not engage
+- **Third-party forums (Reddit, etc.) become the sediment layer for filtered voices**: the official forum shows managed calm; third-party platforms accumulate complaints that cannot survive official channels
+- **The credibility of "positive feedback" is questionable**: in an environment where criticism is efficiently cleaned up, the sample of positive voices is systematically contaminated and cannot serve as independent public opinion
+
+### 📁 The Significance of the GitHub Archive
+
+- `LG-leo/WarThunder_Issue`: **589 clones in 14 days**, recording the full technical data, ban-reason drift, and timeline
+- Also owns `IG0606ADD_NOTEwithCAMcoursebook` (IGCSE Additional Math notes), **557 clones in 14 days**
+- Both repositories share the same pattern: **turning real needs that are ignored or suppressed by official channels into a public, clonable, traceable GitHub archive**
+- The forum can delete posts and ban accounts; GitHub commits, forks, and clone stats leave traces that are hard to erase wholesale
+
+### 💎 Final Conclusion
+
+TheKnightOfZero is not the "mastermind" of this affair, but **the front-end execution terminal of a mechanism that decides to silence first and finds rule justifications afterward**. His speed of action (within 2 days), the reason drift, and the simultaneous network escalation (480ms → 1000ms) together expose that **the official control over the AS13335 path is not a passive network problem but an active strategy with dedicated resources; forum post deletion and account bans, and network-layer penalties, are the same "special crackdown" executed simultaneously at both the speech and technical ends.**
+
+
 ----
 
 <!-- CLONE_STATS_START -->
