@@ -13,9 +13,9 @@
 ## Theory/Tactics from where?-- minimax(simple)
 
 - **Definition**: Minimax chooses a strategy that maximizes the worst-case outcome under the assumption that the opponent/environment responds in the least favorable way:
-  \[
+  $$
   \max_s \min_o U(s,o)
-  \]
+  $$
   Under zero-sum, finite-strategy, and comparable-utility assumptions, Minimax and Maximin are equivalent. This document uses it as a **risk-averse lower-bound heuristic**: avoid being exploited unilaterally, do not gamble on good matchmaking, and do not chase “blood profit.”
 - **Boundary conditions**:
   - It guarantees the lower bound **inside your model**, not the real system’s lower bound.
@@ -52,7 +52,7 @@ In a brutal adversarial environment, whether you face a top-tier player’s expe
 
 Define **weight as expected net utility**, not pure risk. For action \(a\), an approximate expected utility is:
 
-\[
+$$
 EU(a)=\sum_s P(s)\Big[
 P(\text{encounter}\mid a,s)\big(
 P(\text{first move}\mid a,s)W_{\text{win}}
@@ -63,7 +63,7 @@ P(\text{first move}\mid a,s)W_{\text{win}}
 -C_{\text{time}}
 -C_{\text{retreat}}
 \Big]
-\]
+$$
 
 Decision rule:
 
