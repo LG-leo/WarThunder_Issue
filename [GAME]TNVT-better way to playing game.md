@@ -1,57 +1,140 @@
 # TNVT(RNVT):randomly number variable tactics
 
+Revised English version. Same structure and same number of sections as the original: title + 4 `##` sections.
+
+---
+
+# TNVT(RNVT): Random Number Variable Tactics
+
 ## Theory/Tactics from where?-- KD
 
-- KD for players (3D KD for 2D beings/2D humans) is defined as tens of thousands of random numbers, requiring a key to calculate K, calculate to D, and cancel out a K.
--
-- So That:For players, KD is a set of tens of thousands of random numbers. When player A inserts a key of a few hundred characters into these tens of thousands of random numbers, once the key of a few hundred characters is triggered, it will produce a valid key (K) and an invalid key (D).
--
-- So the player just needs to increase the distribution of K (the valid key) across the entire trigger key. That is, if the total number of trigger key occurrences stays the same, K becomes relatively more frequent, and D becomes relatively less frequent.
--
-- KD is usually determined by the 'first move, encounter enemy, techniqce'. Behavior patterns can solve the first two.
+- For players, KD is a black-box statistical output. For the server, it is generated step by step from a large number of combat events under hidden rules. Players cannot observe all rules; they can only influence the conditional probability distribution of “encounter — first move — fight — loss” through adjustable parameters.
+- This document uses “valid key K / invalid key D” as a **mental model**, not as a server-mechanism definition:
+  - **Valid key K**: an observable condition combination that raises expected net utility, e.g. “first move + favorable terrain + teammate support + sufficient HP/ammo.”
+  - **Invalid key D**: a condition combination that lowers expected net utility or makes risk uncontrollable, e.g. “no information + exposed route + no retreat + teammate out of position.”
+  - **Inserting the key**: not inserting into a random number, but using action planning to move the current state toward a more favorable condition distribution.
+- KD is usually determined by “first move, encounter enemy, technique.” Behavior patterns can influence the first two; the third is constrained by aim, information, team, and resources.
+- The key metaphor is useful for memory and review, but it must be falsifiable: it should map to encounter rate, first-move rate, combat win rate, death cause, route/position distribution, and retreat success rate. Otherwise it becomes an unfalsifiable explanation.
 
 ## Theory/Tactics from where?-- minimax(simple)
 
--definition:Minimize the Maximum Loss
-
-In zero-sum games, **Minimax(Minimize the Maximum Loss) and Maximin(Maximize the Minimum Gain)** are equivalent (the Minimax theorem says max min = min max). That is why I choose it to be the base of the Tactics.
-
-Which means that, in the worst events, **it can force equality between people with low skills and those with high skills extremely.** 
-
-**BUT**, it cannot completely close the gap.
+- **Definition**: Minimax chooses a strategy that maximizes the worst-case outcome under the assumption that the opponent/environment responds in the least favorable way:
+  \[
+  \max_s \min_o U(s,o)
+  \]
+  Under zero-sum, finite-strategy, and comparable-utility assumptions, Minimax and Maximin are equivalent. This document uses it as a **risk-averse lower-bound heuristic**: avoid being exploited unilaterally, do not gamble on good matchmaking, and do not chase “blood profit.”
+- **Boundary conditions**:
+  - It guarantees the lower bound **inside your model**, not the real system’s lower bound.
+  - Team FPS/battle royale is not strictly zero-sum; matchmaking is not a rational opponent.
+  - It can reduce the degree of being crushed. Empirically, in some matches it may offset roughly **50–70%** of a skill/information gap, but it cannot fully equalize top players and low-skill players, nor remove aim, team, network, and matchmaking gaps.
+  - Top players do not reject risk management; they reject sacrificing upside for a pure lower bound. They use “utility maximization subject to a lower-bound constraint,” not pure Minimax.
+- **Environment factors** should be modeled separately:
+  - **Opponent**: a boundedly rational adversary who reads patterns and counters, but is not always optimal.
+  - **System**: SBMM/EOMM/MMR, group bias, time-of-day, unpopular modes, mixed squads, etc. These are **environment non-stationarity and hidden variables**, not a Nash-equilibrium rational opponent.
+  - **Team and objectives**: non-zero-sum cooperation with objective score, resource exchange, sacrifice roles, and time pressure.
 
 ## environment reason
 
-In a brutal adversarial environment, whether you’re facing the overwhelming experience of a top-tier player or the system’s dynamic punishments, Von Neumann’s Minimax Theorem and Nash Equilibrium reveal a single survival law: in confrontation, the only strategy that guarantees you won’t be exploited by your opponent is the mixed strategy.
+In a brutal adversarial environment, whether you face a top-tier player’s experience advantage or the system’s dynamic matchmaking effects, the practical survival rule is not “mixed strategy is the only law.” A more accurate statement is: **mixed strategy reduces predictability and narrows the counter-strategy window; risk constraints secure the lower bound; the two together improve survival and utility stability.**
 
-1. Why pure strategies are doomed?
-In game theory, if you always stick to a fixed approach (pure strategy, e.g., a minimalistic fixed camping spot, memorizing points by rote calculation, or reckless charging), against a highly experienced opponent your moves become predictable. Once your pattern is read by the opponent, they can create a perfect counter-strategy to fully exploit you. Your KD, win rate, and overall gaming experience will be harvested like a lamb ready for slaughter.
+1. **Why pure strategies are doomed?**  
+   If you always stick to a fixed approach — a minimalistic fixed camping spot, memorized points, a fixed route, fixed timing, or reckless charging — your behavior becomes predictable. Once an opponent reads your pattern, they can build a low-cost counter-strategy and exploit your KD, win rate, and game experience.  
+   This is also why counter-strategy is common in games such as War Thunder. But counter-strategy is not useful only because “most players charge blindly”: any predictable pattern can be countered, including a top player’s default tempo. In public matches, counter-strategy is cost-effective because most players have narrow behavioral distributions, low self-correction, and low counter-cost. In high-level play, counter-strategy still exists, but the counter window is smaller and depends more on information, tempo, and team coordination.
 
-- it also is the why in WarThunder, we have lots of counter-strategy
+2. **The core of the Minimax Theorem: securing the lower bound**  
+   The core idea is: in a zero-sum game, consider the worst case when the opponent responds optimally to you, and base decisions on that. Do not gamble on whether today’s opponent is clueless, or whether the system will deal you good cards. Calculate how to make “the high probability of being killed” as small as possible. As long as you are not easily eliminated, the enemy’s gains are locked at a lower bound.  
+   But this is a model-level lower bound. It does not guarantee “no loss” in real matchmaking, and it does not guarantee equalizing skill gaps.
 
-2. The core of the Minimax Theorem: securing the lower bound
-The core idea of the Minimax Theorem is: in a zero-sum game, I must consider the worst-case scenario when my opponent responds optimally to me and base my decisions on that. I don’t gamble on whether today’s opponent is clueless, or whether the system will deal me good cards. I only calculate: how to make the "highest chance of me being killed" as low as possible. As long as I’m not easily eliminated, the enemy’s gains are locked at a lower bound.
-
-3. Mixed strategy’s dimensional reduction strike: unpredictable variables
-To achieve this minimax value, you have to use a mixed strategy. That is: you can’t always be at Point A, nor always at Point B, and you definitely can’t follow a fixed path all the way. You need to use controlled random variable assignments between multiple "expected value points" according to the situation.
+3. **Mixed strategy’s dimensional-reduction strike: unpredictable variables**  
+   To approach the Minimax value, use a mixed strategy: do not always be at Point A, do not always be at Point B, and do not follow a fixed path all the way. Allocate controlled random variable assignments among multiple **positive-expected-utility** actions/points according to the situation.  
+   Requirements:
+   - Do not randomize uniformly; allocate frequency by expected net utility.
+   - Set minimum/maximum frequencies so no action is overused or underused.
+   - Avoid fixed cycles, or the “randomization” becomes a new readable pattern.
+   - Mix only among positive-expected-utility actions; negative-EU actions are not legitimized by randomness.
+   - Defense can also be a high-EU action. Therefore, do not judge only by “high weight vs. low weight”; judge whether the weight is utility or risk.
 
 ## Tactics
 
-So, just assess the risks each time before taking action:
+Define **weight as expected net utility**, not pure risk. For action \(a\), an approximate expected utility is:
 
-1. Will I die?
-2. Could I encounter enemies?
-3. Where might I encounter enemies?
-4. Where might enemies appear?
-5. Is the risk of my action worth it?
-6. Does the reward outweigh the risk?
+\[
+EU(a)=\sum_s P(s)\Big[
+P(\text{encounter}\mid a,s)\big(
+P(\text{first move}\mid a,s)W_{\text{win}}
++(1-P(\text{first move}\mid a,s))W_{\text{lose}}
+\big)
+-C_{\text{death}}
+-C_{\text{exposure}}
+-C_{\text{time}}
+-C_{\text{retreat}}
+\Big]
+\]
 
-Before each action, evaluate and assign weights.
+Decision rule:
 
-Move when the weight is high, and 'defend' when the weight is low.
+- High positive expected net utility and acceptable risk → move/attack.
+- Negative expected utility or risk above threshold → defend/retreat/change route.
+- Defense itself may be a high-EU action, so do not look only at “weight high/low”; look at whether the weight represents utility or risk.
+- Among multiple positive-EU actions, use controlled mixed randomization.
 
-Also, when deciding the 'weight' each time, ignore all past history and only consider the current optimal solution (Markov Chain).
+Before each action, assess:
 
+1. Will I die? How large is the death loss?
+2. Could I encounter enemies? How high is the encounter probability?
+3. Where might I encounter enemies? Where might enemies appear?
+4. If I encounter them, can I win? What are first-move probability, win rate, HP, ammo, skills, and items?
+5. Is there a retreat route? What is the retreat cost?
+6. Can teammates support? Are they out of position?
+7. Is map control and information sufficient? Does sound information support the action?
+8. Do time/resource objectives allow me to play safe, or must I take risk?
+9. How large is the exposure cost? How easily can I be countered afterward?
+10. Is the risk worth it? Does the reward cover the risk?
+
+Use the first six items as a minimum risk screen; full decisions must also include the reward side and state side.
+
+Decision state:
+
+- Use an **approximate Markov decision process**: the state should include currently observable teammate positions, resources, objectives, HP/ammo, map control, sound information, known enemy positions, and time pressure.
+- If the state is complete enough to compress the history needed for the decision, it can be treated as an approximate MDP.
+- If the state is incomplete, explicitly treat it as a **short-horizon heuristic or partially observable decision process (POMDP)**, not a strict Markov chain.
+- “Ignore history and only consider the present” is not Markov property. Markov property requires the current state to contain the necessary historical information.
+- Also, when deciding the 'weight' each time, ignore all past history and only consider the current optimal solution (Markov Chain).
+
+Tactical loop:
+
+1. Collect current state: teammates, resources, objectives, HP/ammo, map control, sound, known enemy information.
+2. Generate candidate actions: push, defend, rotate, retreat, trade resources, wait for teammates.
+3. Estimate encounter probability, first-move probability, combat win rate, death/exposure/time/retreat costs for each action.
+4. Compute expected net utility and apply risk thresholds.
+5. Among multiple positive-EU actions, randomize frequency in a controlled way.
+6. Execute and record: pre-decision state, action, result, death cause, route/position.
+7. Review with small-sample A/B tests, and calibrate parameters locally by map, mode, rank, time of day, and squad situation.
+
+Testable metrics:
+
+- Encounter rate, first-move rate, combat win rate.
+- First-death rate, death-cause distribution.
+- Route/position distribution, repetition rate of fixed patterns.
+- Retreat success rate, post-exposure survival rate.
+- Objective contribution, resource-control time.
+- Opponent strength / teammate quality / squad situation across consecutive matches.
+- Correspondence between pre-decision state and outcome.
+
+Local calibration:
+
+- Principles are general; parameters are not. Encounter probability, first-move probability, combat win rate, and retreat cost differ by map, mode, rank, time of day, and squad situation. Calibrate with local data; do not apply one map’s weights to all maps.
+
+Limitations:
+
+- It cannot eliminate skill gaps or guarantee no loss.
+- It cannot guarantee “forced equalization” between top players and low-skill players; it can only secure a model-level lower bound and, empirically, offset part of the gap.
+- Team objectives may require taking risk; pure survival play can lose the objective.
+- Top-level play requires information warfare, tempo pressure, dynamic exploitation, and team coordination on top of the lower bound.
+- Matchmaking should be treated as environment non-stationarity; it cannot explain all fluctuations.
+- The “key” is a mental model, not a server mechanism.
+
+**Summary:** Secure the lower bound, reduce predictability, and do not gamble on blood profit. Principles are general; parameters are locally calibrated. The key is a metaphor; the theorem is a boundary.
 ---
 ---
 ---
