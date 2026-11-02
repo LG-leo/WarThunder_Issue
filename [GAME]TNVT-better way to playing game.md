@@ -1,5 +1,13 @@
 # TNVT(RNVT): Random Number Variable Tactics
 
+*“（Utility Maximization with Lower-Bound Constraint）”almost no sense, don't use (both) minimax & maximin. May they can be better in MATH（**Flawless in the mathematical model**）,but WT is not MATH, WT is not pure environment（, because in practical operation, it's practically a human-defying paradox.）.*
+
+*To "maximize utility," you have to break your lower limit.  And that's the ridiculous part. When you want to increase your K (kills), you have to peek, you have to move, you have to shoot.*
+
+*But the moment you peek/move/shoot, your exposure increases, and your "lower limit" gets broken.*
+
+In 'War Thunder,' high rewards always come with high variance.
+
 ## Theory/Tactics from where?-- KD
 
 - For players, KD is a black-box statistical output. For the server, it is generated step by step from a large number of combat events under hidden rules. Players cannot observe all rules; they can only influence the conditional probability distribution of “encounter — first move — fight — loss” through adjustable parameters.
