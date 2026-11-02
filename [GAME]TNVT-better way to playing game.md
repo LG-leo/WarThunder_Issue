@@ -1,9 +1,3 @@
-# TNVT(RNVT):randomly number variable tactics
-
-Revised English version. Same structure and same number of sections as the original: title + 4 `##` sections.
-
----
-
 # TNVT(RNVT): Random Number Variable Tactics
 
 ## Theory/Tactics from where?-- KD
