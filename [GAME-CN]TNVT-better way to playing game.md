@@ -200,9 +200,7 @@ $$
 令参数空间为 Theta，决策空间为 D，决策规则 delta 的风险函数为 R。一个规则 delta0 是极小极大规则，如果它最小化最大风险：
 
 $$
-\sup_{\theta \in \Theta} R_{\theta,\delta_0}
-=
-\inf_{\delta} \sup_{\theta \in \Theta} R_{\theta,\delta}
+\sup_{\theta \in \Theta} R(\theta, \delta_0) = \inf_{\delta} \sup_{\theta \in \Theta} R(\theta, \delta).
 $$
 
 用每个规则在最坏参数下的表现来评价它，然后选最坏情况风险最小的规则。
