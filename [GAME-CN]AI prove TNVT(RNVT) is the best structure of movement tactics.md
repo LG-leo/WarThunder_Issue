@@ -14,9 +14,9 @@
 - \(\mathcal{A}_{\text{info}}\)：博弈信息层（信息操纵）
 
 期望效用：
-\[
+$$
 U(\pi) = \sum_{k \in \{\text{pos,micro,mix,info}\}} \Delta U_k(\pi_k)
-\]
+$$
 
 其中 \(\Delta U_k\) 是第 \(k\) 层的边际贡献。
 
