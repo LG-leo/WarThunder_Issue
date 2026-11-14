@@ -2,8 +2,6 @@
 
 ----
 
-MAC problem[1]cloudflare Warp 不能进行单独的DNS解析
-
 war thunder BUG[2]war thunder不能使用中文输入法
 
 ```
@@ -36,7 +34,7 @@ MAC problem+war thunder BUG[10]war thunder没有按到option会动不了视角
 
 MAC problem[11]程序会莫名其妙的损坏，哪怕里面的文件压根没有损坏
 
-war thunder BUG[12] 本地会话文件莫名其妙的损坏或不可写（cache) 
+war thunder BUG[12] 本地会话文件莫名其妙的损坏或不可写（cache）
 
 war thunder BUG[13] 启动器和客户端的会话会莫名其妙的不同步
 
