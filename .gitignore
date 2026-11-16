@@ -1,0 +1,10 @@
+.DS_Store
+
+# Generated / local-only configs. They contain private keys.
+protonvpn.conf
+WT_CF_chain.yaml
+WT_CF_chain.merge.yaml
+WT_CF_chain.template.yaml
+WT_CF.yaml
+warp-Cloudflare-AS13335-masque.yaml
+protonvpn-wg-confgen
