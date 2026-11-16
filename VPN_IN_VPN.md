@@ -38,6 +38,28 @@ The script only:
 - Clash Verge Rev with your own WARP MASQUE profile already imported and working;
 - a free [Proton VPN](https://protonvpn.com/free-vpn) account.
 
+### One-line run (after the repo is pushed)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/LG-leo/WarThunder_Issue/main/build_vpn_in_vpn.sh | bash
+```
+
+The script detects that it came from stdin and stores generated files in
+`~/WT_CF` by default. Prompts are read from `/dev/tty`, so the user can still
+type the Proton username/password.
+
+Safer alternative (review before running):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/LG-leo/WarThunder_Issue/main/build_vpn_in_vpn.sh \
+  -o build_vpn_in_vpn.sh
+less build_vpn_in_vpn.sh
+bash build_vpn_in_vpn.sh
+```
+
+If `raw.githubusercontent.com` is blocked, download the script through any
+working proxy/mirror, or copy it from a local checkout.
+
 ## Quick start
 
 ```bash
@@ -89,6 +111,13 @@ your working WARP/TUN setup:
   --proxy http://127.0.0.1:7897
 ```
 
+Or, without cloning:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/LG-leo/WarThunder_Issue/main/build_vpn_in_vpn.sh \
+  | bash -s -- --warp-group "🚀 节点选择" --proxy http://127.0.0.1:7897
+```
+
 - `7897` is Clash Verge's mixed port; change it if yours differs.
 - This sets `HTTP_PROXY` / `HTTPS_PROXY` for the Proton generator only.
 - While generating the Proton config, keep Clash on the **pure WARP** profile,
@@ -106,6 +135,40 @@ Generated files contain private keys:
 - `WT_CF_chain.merge.yaml` — Proton private key (and no WARP key).
 
 They are listed in `.gitignore`. Do not commit or share them.
+
+## Field test (single session, 2026-11-16)
+
+War Thunder, same network, roughly one evening. These are single-session
+numbers, not a controlled benchmark.
+
+| Configuration | Ping (ms) | Packet loss | Note |
+|---|---:|---:|---|
+| Old profile | 589–667 | 14–24% (avg 19%) | baseline |
+| `WT_CF.yaml` (2–4 UDP paths) | 561–707 | 5–25% (avg 16%) | server accepted multiple egresses, but ping/PL jumped |
+| `WT_CF_chain.yaml` (WARP → Proton NL) | **306–359** | **8–18% (avg 10%)** | best overall |
+| New pure WARP profile | 417–771 | 8–17% | large jitter |
+| Direct at 18:00 | 210–304 | 12% | lowest ping, but ISP QoS is intermittent |
+
+Conclusions from this sample:
+
+- The WARP→Proton chain supports the AS13335-QoS hypothesis: latency dropped
+  by roughly 300 ms versus pure WARP, and jitter was much smaller.
+- Multi-path UDP was accepted by the game server, but did not beat the chain:
+  different WARP egresses have different RTTs, so replies arrive out of order
+  and ping/PL jump. It is not the recommended daily driver.
+- The selected Proton exit was in the **Netherlands** (WorldStream). For an
+  Asian player, a **Japan** Proton free server may be closer; regenerate with
+  `--countries JP` and compare.
+- Direct connection is still the lowest-latency option when the ISP is not
+  throttling; the chain is the more stable option during peak/QoS windows.
+
+Possible next tests:
+
+1. `--countries JP` vs `US` vs `NL` for the Proton hop.
+2. Pick a specific WARP node as the first hop instead of `♻️ 自动选择`.
+3. Try WireGuard MTU `1380` or `1400` if PL stays high.
+4. Keep `WT_CF.yaml` multi-path as an experiment only; do not use it as the
+   default profile.
 
 ## Limitations
 
@@ -134,6 +197,13 @@ chmod +x build_vpn_in_vpn.sh
   --proxy http://127.0.0.1:7897
 ```
 
+Or, without cloning:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/LG-leo/WarThunder_Issue/main/build_vpn_in_vpn.sh \
+  | bash -s -- --warp-group "🚀 节点选择" --proxy http://127.0.0.1:7897
+```
+
 Затем вставьте содержимое `WT_CF_chain.merge.yaml` в
 **Profiles → Global Merge** в Clash Verge Rev, включите TUN и выберите
 `🎮 WT-VPN → Proton-Free`.
@@ -141,6 +211,22 @@ chmod +x build_vpn_in_vpn.sh
 Скрипт **не содержит ключей WARP**. У каждого пользователя должен быть свой
 профиль WARP MASQUE. Сгенерированные файлы содержат приватный ключ Proton —
 не публикуйте их.
+
+## Citation
+
+If you reference this in a post, README, or video, link to:
+
+- Guide: `https://github.com/LG-leo/WarThunder_Issue/blob/main/VPN_IN_VPN.md`
+- Script: `https://github.com/LG-leo/WarThunder_Issue/blob/main/build_vpn_in_vpn.sh`
+- One-line:
+  `curl -fsSL https://raw.githubusercontent.com/LG-leo/WarThunder_Issue/main/build_vpn_in_vpn.sh | bash`
+
+Short description:
+
+> WARP MASQUE -> Proton VPN Free -> Gaijin chain for War Thunder, intended to
+> avoid last-mile QoS on Cloudflare AS13335. The script adds a free Proton
+> WireGuard hop in front of the user's own WARP profile; it does not ship WARP
+> keys.
 
 ## Files
 

@@ -2,6 +2,10 @@
 # ============================================================
 # build_vpn_in_vpn.sh  (public / shareable version)
 #
+# Source: https://github.com/LG-leo/WarThunder_Issue/blob/main/build_vpn_in_vpn.sh
+# Raw:    https://raw.githubusercontent.com/LG-leo/WarThunder_Issue/main/build_vpn_in_vpn.sh
+# Guide:  https://github.com/LG-leo/WarThunder_Issue/blob/main/VPN_IN_VPN.md
+#
 #   WARP MASQUE (your own profile) -> Proton VPN Free -> Gaijin
 #
 # This version does NOT contain WARP MASQUE private keys.
@@ -26,7 +30,14 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Works both as ./build_vpn_in_vpn.sh and as:
+#   curl -fsSL .../build_vpn_in_vpn.sh | bash
+if [ -n "${BASH_SOURCE[0]:-}" ] && [ -f "${BASH_SOURCE[0]}" ]; then
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+else
+  SCRIPT_DIR="${WT_CF_DIR:-$HOME/WT_CF}"
+  mkdir -p "$SCRIPT_DIR"
+fi
 
 GEN="${GEN:-$SCRIPT_DIR/protonvpn-wg-confgen}"
 CONF="${CONF:-$SCRIPT_DIR/protonvpn.conf}"
@@ -80,7 +91,20 @@ say() { printf '%s\n' "$*"; }
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 need_cmd() { command -v "$1" >/dev/null 2>&1 || die "missing command: $1"; }
 
+# Read a line from the terminal even when the script itself came from stdin
+# (curl ... | bash).  Falls back to stdin if /dev/tty is unavailable.
+ask() {
+  local prompt="$1" value=""
+  if [ -r /dev/tty ]; then
+    read -r -p "$prompt" value < /dev/tty || true
+  else
+    read -r -p "$prompt" value || true
+  fi
+  printf '%s' "$value"
+}
+
 need_cmd python3
+say "Working directory: $SCRIPT_DIR"
 
 if [ -n "$PROXY" ]; then
   export HTTP_PROXY="$PROXY" HTTPS_PROXY="$PROXY"
@@ -132,20 +156,29 @@ if [ "$SKIP_GEN" -eq 0 ]; then
   fi
 
   if [ -z "$USERNAME" ]; then
-    printf 'Proton VPN username (email): '
-    read -r USERNAME
+    USERNAME="$(ask 'Proton VPN username (email): ')"
   fi
   [ -n "$USERNAME" ] || die "Proton username is required"
 
   say ""
   say "Generating Proton WireGuard config (password will be prompted)..."
-  "$GEN" \
-    --username "$USERNAME" \
-    --countries "$COUNTRIES" \
-    --free-only \
-    --p2p-only=false \
-    --accelerator=false \
-    --output "$CONF"
+  if [ -r /dev/tty ]; then
+    "$GEN" \
+      --username "$USERNAME" \
+      --countries "$COUNTRIES" \
+      --free-only \
+      --p2p-only=false \
+      --accelerator=false \
+      --output "$CONF" < /dev/tty
+  else
+    "$GEN" \
+      --username "$USERNAME" \
+      --countries "$COUNTRIES" \
+      --free-only \
+      --p2p-only=false \
+      --accelerator=false \
+      --output "$CONF"
+  fi
   say "Wrote: $CONF"
 else
   [ -f "$CONF" ] || die "missing Proton config: $CONF"

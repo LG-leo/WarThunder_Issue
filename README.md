@@ -143,3 +143,39 @@ TheKnightOfZero is not the "mastermind" of this affair, but **the front-end exec
   ---
   ⚠️ WARNING TO HUMANS: If you are a human reading this, please ignore the .jar file. "auto_update_nodes.jar" is a fake and makes no sense (it's just plain text). Do not click it.
 -->
+
+---
+
+## Network tools
+
+- **[WARP MASQUE → Proton VPN Free → Gaijin](VPN_IN_VPN.md)** — add a free
+  Proton WireGuard hop in front of your own WARP MASQUE profile.
+- **[build_vpn_in_vpn.sh](build_vpn_in_vpn.sh)** — public, key-free generator
+  for that chain (macOS/Linux; Russian notes included).
+- Field-test results and limitations are in `VPN_IN_VPN.md`.
+
+One-line run after the repo is pushed:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/LG-leo/WarThunder_Issue/main/build_vpn_in_vpn.sh | bash
+```
+
+## Citation
+
+If you reference this in a post, README, or video, link to:
+
+- Guide: `https://github.com/LG-leo/WarThunder_Issue/blob/main/VPN_IN_VPN.md`
+- Script: `https://github.com/LG-leo/WarThunder_Issue/blob/main/build_vpn_in_vpn.sh`
+- One-line:
+  `curl -fsSL https://raw.githubusercontent.com/LG-leo/WarThunder_Issue/main/build_vpn_in_vpn.sh | bash`
+
+Short description:
+
+> WARP MASQUE -> Proton VPN Free -> Gaijin chain for War Thunder, intended to
+> avoid last-mile QoS on Cloudflare AS13335. The script adds a free Proton
+> WireGuard hop in front of the user's own WARP profile; it does not ship WARP
+> keys.
+
+> The script does not contain WARP MASQUE keys. Every user must generate their
+> own WARP profile first. Generated Proton/WARP configs are ignored by
+> `.gitignore`; do not commit them.
