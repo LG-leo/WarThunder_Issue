@@ -162,6 +162,18 @@ Conclusions from this sample:
 - Direct connection is still the lowest-latency option when the ISP is not
   throttling; the chain is the more stable option during peak/QoS windows.
 
+### Why the chain, not more WARP paths
+
+If Gaijin applies QoS to the **whole AS13335**, then four WARP egress IPs are
+not four independent paths: they share the same ASN-level policer. Sending four
+copies can even make things worse, because the same policed capacity now sees
+4× the UDP load. Multi-path only helps when losses are independent per path;
+ASN-level shaping makes them correlated.
+
+This is consistent with the measurements above: multi-WARP barely moved PL and
+increased jitter, while moving the egress to Proton's ASN cut latency by about
+300 ms. The fix is to leave AS13335, not to send more packets inside it.
+
 Possible next tests:
 
 1. `--countries JP` vs `US` vs `NL` for the Proton hop.
