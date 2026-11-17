@@ -19,7 +19,7 @@ Spam（垃圾广告）、Multi-posting（重复发帖）、3.15 Dismissive attit
 
 ## and absolutely! I cannot repiles any topic!
 
-
+gaijin always attact direct connect and AS13335!
 
 ----
 # AI-summerize -DeepSeek
