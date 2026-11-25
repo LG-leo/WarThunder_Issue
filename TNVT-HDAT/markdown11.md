@@ -121,9 +121,11 @@ $$
 
 **注意那个 $g(a)$——足迹。**
 
+![alt text](<截屏2026-11-25 21.13.33.png>)
 
+![alt text](<picture/截屏2026-11-25 21.18.50.png>)
 
-
+![alt text](<picture/截屏2026-11-25 21.22.39.png>)
 
 ---
 ---
@@ -211,6 +213,15 @@ $$
 
 $$
 P(s_{t+1}\mid s_t,a_t)=\int_{\mathcal{H}}P(s_{t+1}\mid s_t,a_t,h)\,P(h\mid \mathcal{F}_t)\,dh
+$$
+
+及
+
+$$
+P(s_{t+1}\mid s_t,a_t)
+=
+\mathbb{E}_{h\sim P(h\mid\mathcal{F}_t)}
+\Big[P(s_{t+1}\mid s_t,a_t,h)\Big]
 $$
 
 ### 3.1 五个可干预维度
